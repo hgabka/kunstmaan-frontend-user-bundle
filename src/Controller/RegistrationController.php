@@ -1,99 +1,90 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Gabe
- * Date: 2017.01.27.
- * Time: 9:57
- */
 
 namespace Hgabka\KunstmaanFrontendUserBundle\Controller;
 
-use FOS\UserBundle\Util\TokenGeneratorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Hgabka\KunstmaanFrontendUserBundle\Entity\KunstmaanFrontendUserInterface;
 use Hgabka\KunstmaanFrontendUserBundle\Model\KunstmaanFrontendUserManagerInterface;
-use FOS\UserBundle\Controller\ResettingController as BaseController;
 
-class ResettingController extends BaseController
+class RegistrationController extends Controller
 {
-    /**
-     * Request reset user password: show form.
-     */
-    public function requestAction()
+    public function frontendRegisterAction(Request $request)
     {
-        return $this->render('FOSUserBundle:Resetting:request.html.twig');
-    }
+        /** @var $userManager KunstmaanFrontendUserManagerInterface */
+        $userManager = $this->get('hgabkakunstmaanfrontenduser.user_manager');
 
-    /**
-     * Request reset user password: show form.
-     */
-    public function frontendRequestAction()
-    {
-        return $this->render('HgabkaKunstmaanFrontendUserBundle:Resetting:frontend_request.html.twig');
-    }
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
 
-    /**
-     * Request reset user password: submit form and send email.
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function frontendSendEmailAction(Request $request)
-    {
-        $username = $request->request->get('username');
+        $form = $this->createForm($this->container->getParameter('hgabka_kunstmaan_frontend_registration_form_type'));
+        $form->setData($user);
 
-        /** @var $user KunstmaanFrontendUserInterface */
-        $user = $this->get('hgabkakunstmaanfrontenduser.user_manager')->findUserByUsernameOrEmail($username);
+        $form->handleRequest($request);
 
-        if (null !== $user) {
-            if (null === $user->getConfirmationToken()) {
-                /** @var $tokenGenerator TokenGeneratorInterface */
-                $tokenGenerator = $this->get('fos_user.util.token_generator');
-                $user->setConfirmationToken($tokenGenerator->generateToken());
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                if ($this->container->getParameter('hgabka_kunstmaan_frontend_registration_confirmation_enabled')) {
+                    $user->setEnabled(false);
+                    $tokenGenerator = $this->get('fos_user.util.token_generator');
+                    $mailer = $this->get('hgabkakunstmaanfrontenduser.mailer');
+                    if (null === $user->getConfirmationToken()) {
+                        $user->setConfirmationToken($tokenGenerator->generateToken());
+                    }
+                    $mailer->sendConfirmationEmailMessage($user);
+                    $this->get('session')->set('hgabka_kunstmaan_frontend_user_send_confirmation_email/email', $user->getEmail());
+                    $userManager->updateUser($user);
+
+                    return $this->redirectToRoute('hgabka_kunstmaan_frontend_user_registration_check_email');
+                } else {
+                    $userManager->updateUser($user);
+
+                    return $this->redirectToRoute('hgabka_kunstmaan_frontend_user_registration_confirmed');
+                }
             }
-
-            $this->get('hgabkakunstmaanfrontenduser.mailer')->sendResettingEmailMessage($user);
-            $this->get('hgabkakunstmaanfrontenduser.user_manager')->updateUser($user);
         }
 
-        return $this->redirectToRoute('hgabka_kunstmaan_frontend_user_resetting_check_email', ['username' => $username]);
+        return $this->render('HgabkaKunstmaanFrontendUserBundle:Registration:frontend_register.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
      * Tell the user to check his email provider.
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
-    public function frontendCheckEmailAction(Request $request)
+    public function frontendCheckEmailAction()
     {
-        $username = $request->query->get('username');
+        $email = $this->get('session')->get('hgabka_kunstmaan_frontend_user_send_confirmation_email/email');
 
-        if (empty($username)) {
-            // the user does not come from the sendEmail action
-            return $this->redirectToRoute('hgabka_kunstmaan_frontend_user_resetting_request');
+        if (empty($email)) {
+            return $this->redirectToRoute('hgabka_kunstmaan_frontend_user_registration');
         }
-        /** @var $user KunstmaanFrontendUserInterface */
-        $user = $this->get('hgabkakunstmaanfrontenduser.user_manager')->findUserByUsernameOrEmail($username);
 
-        return $this->render('HgabkaKunstmaanFrontendUserBundle:Resetting:frontend_check_email.html.twig', [
+        $this->get('session')->remove('hgabka_kunstmaan_frontend_user_send_confirmation_email/email');
+        $user = $this->get('hgabkakunstmaanfrontenduser.user_manager')->findUserByEmail($email);
+
+        if (null === $user) {
+            throw new NotFoundHttpException(sprintf('The user with email "%s" does not exist', $email));
+        }
+
+        return $this->render('HgabkaKunstmaanFrontendUserBundle:Registration:frontend_check_email.html.twig', [
             'user' => $user,
         ]);
     }
 
     /**
-     * Reset user password.
+     * Receive the confirmation token from user email provider, login the user.
      *
      * @param Request $request
      * @param string  $token
      *
      * @return Response
      */
-    public function frontendResetAction(Request $request, $token)
+    public function frontendConfirmAction(Request $request, $token)
     {
         /** @var $userManager KunstmaanFrontendUserManagerInterface */
         $userManager = $this->get('hgabkakunstmaanfrontenduser.user_manager');
@@ -101,23 +92,62 @@ class ResettingController extends BaseController
         $user = $userManager->findUserByConfirmationToken($token);
 
         if (null === $user) {
-            throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
+            throw new NotFoundHttpException(sprintf('The user with confirmation token "%s" does not exist', $token));
         }
 
-        $form = $this->createForm($this->container->getParameter('hgabka_kunstmaan_frontend_resetting_form_type'));
-        $form->setData($user);
+        $user->setConfirmationToken(null);
+        $user->setEnabled(true);
 
-        $form->handleRequest($request);
+        $userManager->updateUser($user);
+        $this->authenticate($user);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $userManager->updateUser($user);
+        return $this->redirectToRoute('hgabka_kunstmaan_frontend_user_registration_confirmed');
+    }
 
-            return $this->redirectToRoute('hgabka_kunstmaan_frontend_user_profile_show');
+    /**
+     * Tell the user his account is now confirmed.
+     */
+    public function frontendConfirmedAction()
+    {
+        $user = $this->getUser();
+        if (!is_object($user) || !$user instanceof KunstmaanFrontendUserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        return $this->render('HgabkaKunstmaanFrontendUserBundle:Resetting:frontend_reset.html.twig', [
-            'token' => $token,
-            'form' => $form->createView(),
+        return $this->render('HgabkaKunstmaanFrontendUserBundle:Registration:frontend_confirmed.html.twig', [
+            'user' => $user,
+            'targetUrl' => $this->getTargetUrlFromSession(),
         ]);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getTargetUrlFromSession()
+    {
+        $key = sprintf('_security.%s.target_path', $this->get('security.token_storage')->getToken()->getProviderKey());
+
+        if ($this->get('session')->has($key)) {
+            return $this->get('session')->get($key);
+        }
+    }
+
+    /**
+     * @param KunstmaanFrontendUserInterface $user
+     */
+    protected function authenticate(KunstmaanFrontendUserInterface $user)
+    {
+        /** @var $userManager KunstmaanFrontendUserManagerInterface */
+        $userManager = $this->get('hgabkakunstmaanfrontenduser.user_manager');
+
+        try {
+            $this->get('hgabkakunstmaanfrontenduser.security.login_manager')->logInUser($this->container->getParameter('hgabka_kunstmaan_frontend_firewall_name'), $user);
+            $user->setLastLogin(new \DateTime());
+
+            $userManager->updateUser($user);
+        } catch (AccountStatusException $ex) {
+            // We simply do not authenticate users which do not pass the user
+            // checker (not enabled, expired, etc.).
+        }
     }
 }

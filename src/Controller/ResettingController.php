@@ -9,15 +9,23 @@
 namespace Hgabka\KunstmaanFrontendUserBundle\Controller;
 
 use FOS\UserBundle\Util\TokenGeneratorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Hgabka\KunstmaanFrontendUserBundle\Entity\KunstmaanFrontendUserInterface;
 use Hgabka\KunstmaanFrontendUserBundle\Model\KunstmaanFrontendUserManagerInterface;
+use FOS\UserBundle\Controller\ResettingController as BaseController;
 
-class ResettingController extends Controller
+class ResettingController extends BaseController
 {
+    /**
+     * Request reset user password: show form.
+     */
+    public function requestAction()
+    {
+        return $this->render('FOSUserBundle:Resetting:request.html.twig');
+    }
+
     /**
      * Request reset user password: show form.
      */
