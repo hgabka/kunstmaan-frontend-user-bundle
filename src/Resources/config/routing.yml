@@ -1,0 +1,54 @@
+KunstmaanAdminBundle:
+    resource: "@KunstmaanAdminBundle/Resources/config/routing.yml"
+
+hgabka_kunstmaan_frontend_user_login:
+    path:  /login
+    defaults: { _controller: FOSUserBundle:Security:login }
+
+hgabka_kunstmaan_frontend_user_security_check:
+    path:  /login_check
+    defaults: { _controller: FOSUserBundle:Security:check }
+
+hgabka_kunstmaan_frontend_user_security_logout:
+    path:  /logout
+    defaults: { _controller: FOSUserBundle:Security:logout }
+
+hgabka_kunstmaan_frontend_user_resetting_request:
+    path:  /resetting/request
+    defaults: { _controller: HgabkaKunstmaanFrontendUserBundle:Resetting:frontendRequest }
+
+hgabka_kunstmaan_frontend_user_resetting_send_email:
+    path:  /resetting/send-email
+    defaults: { _controller: HgabkaKunstmaanFrontendUserBundle:Resetting:frontendSendEmail }
+
+hgabka_kunstmaan_frontend_user_resetting_check_email:
+    path:  /resetting/check-email
+    defaults: { _controller: HgabkaKunstmaanFrontendUserBundle:Resetting:frontendCheckEmail }
+
+hgabka_kunstmaan_frontend_user_resetting_reset:
+    path:  /resetting/reset/{token}
+    defaults: { _controller: HgabkaKunstmaanFrontendUserBundle:Resetting:frontendReset }
+
+hgabka_kunstmaan_frontend_user_registration:
+    path:  /register
+    defaults: { _controller: HgabkaKunstmaanFrontendUserBundle:Registration:frontendRegister }
+
+hgabka_kunstmaan_frontend_user_registration_confirmed:
+    path:  /registration/confirmed
+    defaults: { _controller: HgabkaKunstmaanFrontendUserBundle:Registration:frontendConfirmed }
+
+hgabka_kunstmaan_frontend_user_registration_confirm:
+    path:  /registration/confirm/{token}
+    defaults: { _controller: HgabkaKunstmaanFrontendUserBundle:Registration:frontendConfirm }
+
+hgabka_kunstmaan_frontend_user_registration_check_email:
+    path:  /registration/check-email
+    defaults: { _controller: HgabkaKunstmaanFrontendUserBundle:Registration:frontendCheckEmail }
+
+hgabka_kunstmaan_frontend_user_profile_show:
+    path:  /profile
+    defaults: { _controller: HgabkaKunstmaanFrontendUserBundle:Profile:frontendShow }
+
+hgabka_kunstmaan_frontend_user_profile_edit:
+    path:  /profile/edit
+    defaults: { _controller: HgabkaKunstmaanFrontendUserBundle:Profile:frontendEdit }

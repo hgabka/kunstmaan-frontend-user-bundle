@@ -1,0 +1,13 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% extends "HgabkaKunstmaanFrontendUserBundle:Layout:layout.html.twig" %}
+
+{% block fos_user_content %}
+    {{ form_start(form, {'method': 'post', 'action': path('hgabka_kunstmaan_frontend_user_registration'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+    {{ form_widget(form) }}
+    <div>
+        <input type="submit" value="{{ 'registration.submit'|trans }}" />
+    </div>
+    {{ form_end(form) }}
+
+{% endblock fos_user_content %}

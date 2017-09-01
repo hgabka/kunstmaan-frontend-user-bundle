@@ -1,0 +1,46 @@
+services:
+    hgabkakunstmaanfrontenduser.user_manager:
+        class: Hgabka\KunstmaanFrontendUserBundle\Model\KunstmaanFrontendUserManager
+        arguments: ["@doctrine", "@hgabkakunstmaanfrontenduser.util.password_updater", "%hgabka_kunstmaan_frontend_user_class%"]
+
+    hgabkakunstmaanfrontenduser.user_provider:
+        class: Hgabka\KunstmaanFrontendUserBundle\Security\KunstmaanFrontendUserProvider
+        arguments: ["@hgabkakunstmaanfrontenduser.user_manager"]
+
+    hgabkakunstmaanfrontenduser.util.password_updater:
+        class: Hgabka\KunstmaanFrontendUserBundle\Util\PasswordUpdater
+        arguments: ["@security.encoder_factory"]
+        
+    hgabkakunstmaanfrontenduser.mailer:
+        class: Hgabka\KunstmaanFrontendUserBundle\Mailer\TwigSwiftMailer
+        arguments: ["@mailer", "@router", "@twig", "%hgabka_kunstmaan_frontend_registration_confirmation_email_template%", "%hgabka_kunstmaan_frontend_resetting_email_template%"]
+        calls:
+            - [ setFromEmail, ["%hgabka_kunstmaan_frontend_email%"]]
+
+    hgabkakunstmaanfrontenduser.registration.form.type:
+        class: Hgabka\KunstmaanFrontendUserBundle\Form\RegistrationFormType
+        arguments: ["%hgabka_kunstmaan_frontend_user_class%"]
+        tags:
+          - { name: form.type }
+
+    hgabkakunstmaanfrontenduser.resetting.form.type:
+        class: Hgabka\KunstmaanFrontendUserBundle\Form\ResettingFormType
+        arguments: ["%hgabka_kunstmaan_frontend_user_class%"]
+        tags:
+          - { name: form.type }
+
+    hgabkakunstmaanfrontenduser.profile.form.type:
+        class: Hgabka\KunstmaanFrontendUserBundle\Form\ProfileFormType
+        arguments: ["%hgabka_kunstmaan_frontend_user_class%"]
+        tags:
+          - { name: form.type }
+
+    hgabkakunstmaanfrontenduser.security.login_manager:
+        class: Hgabka\KunstmaanFrontendUserBundle\Security\LoginManager
+        arguments: ["@security.token_storage", "@security.user_checker", "@security.authentication.session_strategy", "@request_stack", null]
+
+    hgabkakunstmaanfrontenduser.security.interactive_login_listener:
+        class: Hgabka\KunstmaanFrontendUserBundle\EventListener\LastLoginListener
+        arguments: ["@hgabkakunstmaanfrontenduser.user_manager"]
+        tags:
+            - { name: kernel.event_subscriber }
