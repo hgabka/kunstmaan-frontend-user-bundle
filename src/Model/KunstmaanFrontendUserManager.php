@@ -1,12 +1,11 @@
 <?php
 
 /*
- * This file is part of the FOSUserBundle package.
- *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * This file is part of PHP CS Fixer.
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Hgabka\KunstmaanFrontendUserBundle\Model;
@@ -23,7 +22,7 @@ use Hgabka\KunstmaanFrontendUserBundle\Util\PasswordUpdaterInterface;
  */
 class KunstmaanFrontendUserManager implements KunstmaanFrontendUserManagerInterface
 {
-    /** @var  Registry */
+    /** @var Registry */
     private $doctrine;
 
     /** @var PasswordUpdaterInterface $passwordUpdater */
@@ -95,14 +94,6 @@ class KunstmaanFrontendUserManager implements KunstmaanFrontendUserManagerInterf
         $this->passwordUpdater->hashPassword($user);
     }
 
-    /**
-     * @return PasswordUpdaterInterface
-     */
-    protected function getPasswordUpdater()
-    {
-        return $this->passwordUpdater;
-    }
-
     public function getClass()
     {
         return $this->class;
@@ -155,5 +146,13 @@ class KunstmaanFrontendUserManager implements KunstmaanFrontendUserManagerInterf
     public function findUserBy(array $criteria)
     {
         return $this->doctrine->getRepository($this->getClass())->findOneBy($criteria);
+    }
+
+    /**
+     * @return PasswordUpdaterInterface
+     */
+    protected function getPasswordUpdater()
+    {
+        return $this->passwordUpdater;
     }
 }

@@ -1,9 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Gabe
- * Date: 2017.01.24.
- * Time: 9:21
+
+/*
+ * This file is part of PHP CS Fixer.
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Hgabka\KunstmaanFrontendUserBundle\Controller;
@@ -14,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 class SecurityController extends BaseController
 {
     /**
-     * Overridden to check if the route matches our member login entry point
+     * Overridden to check if the route matches our member login entry point.
      *
      * @param array $data
      *
@@ -31,9 +33,9 @@ class SecurityController extends BaseController
         // at this bundles' ::layout.html.twig file, and end in a endless loop
         $route = $request->attributes->get('_route');
 
-        if ($route == 'hgabka_kunstmaan_frontend_user_login') {
+        if ($route === 'hgabka_kunstmaan_frontend_user_login') {
             $template = 'HgabkaKunstmaanFrontendUserBundle:Security:frontend_login.html.twig';
-        } elseif ($route == 'fos_user_security_login') {
+        } elseif ($route === 'fos_user_security_login') {
             $template = 'KunstmaanAdminBundle:Security:login.html.twig';
         }
 

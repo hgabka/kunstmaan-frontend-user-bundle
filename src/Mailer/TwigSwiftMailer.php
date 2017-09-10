@@ -1,18 +1,17 @@
 <?php
 
 /*
- * This file is part of the FOSUserBundle package.
- *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * This file is part of PHP CS Fixer.
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Hgabka\KunstmaanFrontendUserBundle\Mailer;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Hgabka\KunstmaanFrontendUserBundle\Entity\KunstmaanFrontendUserInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @author Christophe Coevoet <stof@notk.org>
@@ -65,9 +64,6 @@ class TwigSwiftMailer
         $this->fromEmail = $email;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function sendConfirmationEmailMessage(KunstmaanFrontendUserInterface $user)
     {
         $template = $this->confirmationTemplate;
@@ -81,9 +77,6 @@ class TwigSwiftMailer
         $this->sendMessage($template, $context, $this->fromEmail, (string) $user->getEmail());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function sendResettingEmailMessage(KunstmaanFrontendUserInterface $user)
     {
         $template = $this->resettingTemplate;

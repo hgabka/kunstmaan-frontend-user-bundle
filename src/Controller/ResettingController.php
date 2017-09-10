@@ -1,20 +1,22 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Gabe
- * Date: 2017.01.27.
- * Time: 9:57
+
+/*
+ * This file is part of PHP CS Fixer.
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Hgabka\KunstmaanFrontendUserBundle\Controller;
 
+use FOS\UserBundle\Controller\ResettingController as BaseController;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
+use Hgabka\KunstmaanFrontendUserBundle\Entity\KunstmaanFrontendUserInterface;
+use Hgabka\KunstmaanFrontendUserBundle\Model\KunstmaanFrontendUserManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Hgabka\KunstmaanFrontendUserBundle\Entity\KunstmaanFrontendUserInterface;
-use Hgabka\KunstmaanFrontendUserBundle\Model\KunstmaanFrontendUserManagerInterface;
-use FOS\UserBundle\Controller\ResettingController as BaseController;
 
 class ResettingController extends BaseController
 {

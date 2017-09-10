@@ -1,9 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Gabe
- * Date: 2017.01.26.
- * Time: 14:12
+
+/*
+ * This file is part of PHP CS Fixer.
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Hgabka\KunstmaanFrontendUserBundle\Form;
@@ -39,10 +41,10 @@ class RegistrationFormType extends AbstractType
             ->add('email', EmailType::class, ['label' => 'form.email', 'translation_domain' => 'FOSUserBundle'])
             ->add('username', null, ['label' => 'form.username', 'translation_domain' => 'FOSUserBundle'])
             ->add('plainPassword', RepeatedType::class, [
-                'type'            => PasswordType::class,
-                'options'         => ['translation_domain' => 'FOSUserBundle'],
-                'first_options'   => ['label' => 'form.password'],
-                'second_options'  => ['label' => 'form.password_confirmation'],
+                'type' => PasswordType::class,
+                'options' => ['translation_domain' => 'FOSUserBundle'],
+                'first_options' => ['label' => 'form.password'],
+                'second_options' => ['label' => 'form.password_confirmation'],
                 'invalid_message' => 'fos_user.password.mismatch',
             ])
         ;
@@ -54,7 +56,7 @@ class RegistrationFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'    => $this->class,
+            'data_class' => $this->class,
             'csrf_token_id' => 'registration',
         ]);
     }

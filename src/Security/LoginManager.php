@@ -1,16 +1,16 @@
 <?php
 
 /*
- * This file is part of the FOSUserBundle package.
- *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * This file is part of PHP CS Fixer.
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Hgabka\KunstmaanFrontendUserBundle\Security;
 
+use Hgabka\KunstmaanFrontendUserBundle\Entity\KunstmaanFrontendUserInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -18,7 +18,6 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Http\RememberMe\RememberMeServicesInterface;
 use Symfony\Component\Security\Http\Session\SessionAuthenticationStrategyInterface;
-use Hgabka\KunstmaanFrontendUserBundle\Entity\KunstmaanFrontendUserInterface;
 
 /**
  * Abstracts process for manually logging in a user.
@@ -59,9 +58,11 @@ class LoginManager implements LoginManagerInterface
      * @param UserCheckerInterface                   $userChecker
      * @param SessionAuthenticationStrategyInterface $sessionStrategy
      * @param RequestStack                           $requestStack
-     * @param RememberMeServicesInterface|null       $rememberMeService
+     * @param null|RememberMeServicesInterface       $rememberMeService
      */
-    public function __construct(TokenStorageInterface $tokenStorage, UserCheckerInterface $userChecker,
+    public function __construct(
+        TokenStorageInterface $tokenStorage,
+        UserCheckerInterface $userChecker,
                                 SessionAuthenticationStrategyInterface $sessionStrategy,
                                 RequestStack $requestStack,
                                 RememberMeServicesInterface $rememberMeService = null

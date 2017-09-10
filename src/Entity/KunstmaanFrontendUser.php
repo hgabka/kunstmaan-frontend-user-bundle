@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of PHP CS Fixer.
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Hgabka\KunstmaanFrontendUserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -64,6 +72,14 @@ abstract class KunstmaanFrontendUser extends AbstractEntity implements Kunstmaan
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getUsername();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function addRole($role)
@@ -103,8 +119,7 @@ abstract class KunstmaanFrontendUser extends AbstractEntity implements Kunstmaan
             $this->username,
             $this->enabled,
             $this->id,
-            $this->email,
-            ) = $data;
+            $this->email) = $data;
     }
 
     /**
@@ -311,13 +326,5 @@ abstract class KunstmaanFrontendUser extends AbstractEntity implements Kunstmaan
         }
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->getUsername();
     }
 }

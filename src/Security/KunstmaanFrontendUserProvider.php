@@ -1,22 +1,21 @@
 <?php
 
 /*
- * This file is part of the FOSUserBundle package.
- *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * This file is part of PHP CS Fixer.
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Hgabka\KunstmaanFrontendUserBundle\Security;
 
+use Hgabka\KunstmaanFrontendUserBundle\Entity\KunstmaanFrontendUserInterface;
+use Hgabka\KunstmaanFrontendUserBundle\Model\KunstmaanFrontendUserManagerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface as SecurityUserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Hgabka\KunstmaanFrontendUserBundle\Entity\KunstmaanFrontendUserInterface;
-use Hgabka\KunstmaanFrontendUserBundle\Model\KunstmaanFrontendUserManagerInterface;
 
 class KunstmaanFrontendUserProvider implements UserProviderInterface
 {
@@ -86,7 +85,7 @@ class KunstmaanFrontendUserProvider implements UserProviderInterface
      *
      * @param string $username
      *
-     * @return KunstmaanFrontendUserInterface|null
+     * @return null|KunstmaanFrontendUserInterface
      */
     protected function findUser($username)
     {
