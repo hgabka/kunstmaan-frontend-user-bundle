@@ -1,3 +1,6 @@
+parameters:
+    hgabkakunstmaanfrontenduser.mailer.class: Hgabka\KunstmaanFrontendUserBundle\Mailer\TwigSwiftMailer
+
 services:
     hgabkakunstmaanfrontenduser.user_manager:
         class: Hgabka\KunstmaanFrontendUserBundle\Model\KunstmaanFrontendUserManager
@@ -12,7 +15,7 @@ services:
         arguments: ["@security.encoder_factory"]
         
     hgabkakunstmaanfrontenduser.mailer:
-        class: Hgabka\KunstmaanFrontendUserBundle\Mailer\TwigSwiftMailer
+        class: "%hgabkakunstmaanfrontenduser.mailer.class%"
         arguments: ["@mailer", "@router", "@twig", "%hgabka_kunstmaan_frontend_registration_confirmation_email_template%", "%hgabka_kunstmaan_frontend_resetting_email_template%"]
         calls:
             - [ setFromEmail, ["%hgabka_kunstmaan_frontend_email%"]]
