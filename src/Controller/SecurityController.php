@@ -33,9 +33,9 @@ class SecurityController extends BaseController
         // at this bundles' ::layout.html.twig file, and end in a endless loop
         $route = $request->attributes->get('_route');
 
-        if ($route === 'hgabka_kunstmaan_frontend_user_login') {
+        if ('hgabka_kunstmaan_frontend_user_login' === $route) {
             $template = 'HgabkaKunstmaanFrontendUserBundle:Security:frontend_login.html.twig';
-        } elseif ($route === 'fos_user_security_login') {
+        } elseif ('fos_user_security_login' === $route) {
             $template = 'KunstmaanAdminBundle:Security:login.html.twig';
         }
 
