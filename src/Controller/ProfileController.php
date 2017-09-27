@@ -2,13 +2,13 @@
 
 namespace Hgabka\KunstmaanFrontendUserBundle\Controller;
 
+use FOS\UserBundle\Controller\ProfileController as BaseController;
 use Hgabka\KunstmaanFrontendUserBundle\Entity\KunstmaanFrontendUserInterface;
 use Hgabka\KunstmaanFrontendUserBundle\Model\KunstmaanFrontendUserManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use FOS\UserBundle\Controller\ProfileController as BaseController;
 
 /**
  * Controller managing the user profile.

@@ -4,10 +4,10 @@ namespace Hgabka\KunstmaanFrontendUserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Kunstmaan\AdminBundle\Entity\AbstractEntity;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 abstract class KunstmaanFrontendUser extends AbstractEntity implements KunstmaanFrontendUserInterface
 {
