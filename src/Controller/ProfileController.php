@@ -8,13 +8,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use FOS\UserBundle\Controller\ProfileController as BaseController;
 
 /**
  * Controller managing the user profile.
  *
  * @author Christophe Coevoet <stof@notk.org>
  */
-class ProfileController extends Controller
+class ProfileController extends BaseController
 {
     /**
      * Show the user.
