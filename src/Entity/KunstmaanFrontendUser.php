@@ -4,6 +4,10 @@ namespace Hgabka\KunstmaanFrontendUserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Kunstmaan\AdminBundle\Entity\AbstractEntity;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 abstract class KunstmaanFrontendUser extends AbstractEntity implements KunstmaanFrontendUserInterface
 {
@@ -318,5 +322,24 @@ abstract class KunstmaanFrontendUser extends AbstractEntity implements Kunstmaan
         }
 
         return $this;
+    }
+
+    /**
+     * @param ClassMetadata $metadata
+     */
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('username', new NotBlank());
+        $metadata->addPropertyConstraint('plainPassword', new NotBlank(['groups' => ['Registration']]));
+        $metadata->addPropertyConstraint('email', new NotBlank());
+        $metadata->addPropertyConstraint('email', new Email());
+        $metadata->addConstraint(new UniqueEntity([
+            'fields' => 'username',
+            'message' => 'errors.user.loginexists',
+        ]));
+        $metadata->addConstraint(new UniqueEntity([
+            'fields' => 'email',
+            'message' => 'errors.user.emailexists',
+        ]));
     }
 }
