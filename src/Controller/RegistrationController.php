@@ -21,8 +21,7 @@ class RegistrationController extends Controller
         $user = $userManager->createUser();
         $user->setEnabled(true);
 
-        $form = $this->createForm($this->container->getParameter('hgabka_kunstmaan_frontend_registration_form_type'));
-        $form->setData($user);
+        $form = $this->createForm($this->container->getParameter('hgabka_kunstmaan_frontend_registration_form_type'), $user);
 
         $form->handleRequest($request);
 

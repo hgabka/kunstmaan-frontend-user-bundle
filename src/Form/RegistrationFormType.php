@@ -14,7 +14,7 @@ class RegistrationFormType extends AbstractType
     /**
      * @var string
      */
-    private $class;
+    protected $class;
 
     /**
      * @param string $class The User class name
