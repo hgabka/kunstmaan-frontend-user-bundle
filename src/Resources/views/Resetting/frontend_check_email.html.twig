@@ -4,6 +4,6 @@
 
 {% block fos_user_content %}
 <p>
-{{ 'resetting.check_email'|trans({'%email%': user.email}) }}
+{{ 'resetting.check_email'|trans({'%email%': user.email,'%tokenLifetime%': tokenLifetime}) }}
 </p>
 {% endblock %}

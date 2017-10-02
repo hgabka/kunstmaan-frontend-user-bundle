@@ -76,6 +76,7 @@ class ResettingController extends BaseController
 
         return $this->render('HgabkaKunstmaanFrontendUserBundle:Resetting:frontend_check_email.html.twig', [
             'user' => $user,
+            'tokenLifetime' => ceil($this->container->getParameter('fos_user.resetting.retry_ttl') / 3600)
         ]);
     }
 
