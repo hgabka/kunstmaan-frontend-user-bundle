@@ -324,22 +324,25 @@ abstract class KunstmaanFrontendUser extends AbstractEntity implements Kunstmaan
         return $this;
     }
 
+
     /**
      * @param ClassMetadata $metadata
      */
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraint('username', new NotBlank());
+        $metadata->addPropertyConstraint('username', new NotBlank([]));
         $metadata->addPropertyConstraint('plainPassword', new NotBlank(['groups' => ['Registration']]));
-        $metadata->addPropertyConstraint('email', new NotBlank());
-        $metadata->addPropertyConstraint('email', new Email());
+        $metadata->addPropertyConstraint('email', new NotBlank(['groups' => ['Default', 'Registration']]));
+        $metadata->addPropertyConstraint('email', new Email(['groups' => ['Default', 'Registration']]));
         $metadata->addConstraint(new UniqueEntity([
             'fields' => 'username',
             'message' => 'errors.user.loginexists',
+            'groups' => ['Default', 'Registration'],
         ]));
         $metadata->addConstraint(new UniqueEntity([
             'fields' => 'email',
             'message' => 'errors.user.emailexists',
+            'groups' => ['Default', 'Registration'],
         ]));
     }
 }
